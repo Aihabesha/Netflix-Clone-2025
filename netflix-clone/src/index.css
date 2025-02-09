@@ -1,0 +1,18 @@
+:root {
+  --font-base: "Roboto", sans-serif;
+  --font-secondary: "Bebas Neue", sans-serif;
+  --color-white: #fff;
+  --bg-color: #111;
+  --primary-color: #ffffff;
+  --secondary-color: #e50914;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #111;
+}
