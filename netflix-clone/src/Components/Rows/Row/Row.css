@@ -1,0 +1,105 @@
+.row {
+  display: flex;
+  flex-direction: column;
+  margin-left: 20px;
+  color: white;
+  position: relative;
+}
+
+.row__title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.row__posters {
+  display: flex;
+  overflow-y: hidden;
+  overflow-x: scroll;
+  padding: 20px 0;
+  position: relative;
+  scroll-behavior: smooth;
+}
+
+.row__posters::-webkit-scrollbar {
+  display: none;
+}
+
+.row__poster {
+  max-height: 200px;
+  object-fit: contain;
+  margin-right: 10px;
+  transition: transform 450ms, opacity 250ms;
+  cursor: pointer;
+}
+
+.row__poster:hover {
+  transform: scale(1.08);
+  opacity: 0.8;
+}
+
+.row__posterLarge {
+  max-height: 400px;
+}
+
+.row__posterLarge:hover {
+  transform: scale(1.09);
+}
+
+/* Indicator Icon for Scrolling */
+.indicator-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 30px;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.indicator-icon:hover {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+/* Trailer Container */
+.row__trailer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.trailer__close {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  font-size: 24px;
+  cursor: pointer;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background 0.3s;
+}
+
+.trailer__close:hover {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  padding: 0 20px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}

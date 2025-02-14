@@ -33,7 +33,7 @@ body {
   .header_left ul li,
   .header_right ul li {
     cursor: pointer;
-    font-size: 14px;
+    font-size: 17px;
     font-weight: 500;
     transition: color 0.3s ease-in-out;
   }
