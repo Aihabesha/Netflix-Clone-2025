@@ -1,59 +1,208 @@
-import React from 'react';
-import './RowList.css';
+When building your Netflix clone, there are certain pieces of code you definitely shouldn't forget to ensure your app is functional, efficient, and easy to maintain. Here's a list of critical code elements you should not miss:
 
-const RowList = ({ title, items }) => {
-    return (
-        <div className="row-list">
-            <h2>{title}</h2>
-            <div className="row-list__items">
-                {items.map((item, index) => (
-                    <div key={index} className="row-list__item">
-                        <img src={item.image} alt={item.title} />
-                        <p>{item.title}</p>
-                    </div>
-                ))}
-            </div>
-        </div>
-    );
+1. API Integration Logic
+Make sure you correctly handle API calls using Axios or another HTTP client. Your axios.js utility or similar setup should handle all interactions with the TMDB API. This includes:
+
+Handling requests to fetch data.
+Using try-catch blocks for error handling.
+Ensuring that the API base URL and endpoints are properly set up.
+Example:
+
+javascript
+Copy
+Edit
+import axios from "axios";
+
+const instance = axios.create({
+  baseURL: "https://api.themoviedb.org/3",  // Base API URL
+});
+
+export default instance;
+2. useEffect for Data Fetching
+In your Row component (or wherever you're displaying movie data), use useEffect to fetch data from the API when the component mounts. Ensure you handle asynchronous code properly and update the component state with the fetched data.
+
+Example:
+
+javascript
+Copy
+Edit
+useEffect(() => {
+  (async () => {
+    try {
+      const response = await axios.get(fetchUrl);
+      setMovies(response.data.results);
+    } catch (error) {
+      console.error("Error fetching data", error);
+    }
+  })();
+}, [fetchUrl]); // Re-fetch if the URL changes
+3. PropTypes Validation
+PropTypes help ensure that your components receive the right type of data, which makes your code more robust and maintainable. Don't forget to validate props in components that receive dynamic data (like Row).
+
+Example:
+
+javascript
+Copy
+Edit
+Row.propTypes = {
+  title: PropTypes.string.isRequired,
+  fetchUrl: PropTypes.string.isRequired,
+  isLargeRow: PropTypes.bool,
 };
+4. Responsive Layout
+Ensure your layout is responsive using CSS or a CSS-in-JS solution (like styled-components). Include media queries to adjust your layout for different screen sizes. This will help ensure your app looks good on both mobile and desktop devices.
 
-export default RowList;
+Example:
 
-
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import './Row.css';
-
-
-const Row = ({ title, fetchUrl, isLargeRow = false }) => {
-    const [movies, setMovies] = useState([]);
-
-    useEffect(() => {
-        async function fetchData() {
-            const request = await axios.get(fetchUrl);
-            setMovies(request.data.results);
-            return request;
-        }
-        fetchData();
-    }, [fetchUrl]);
-
-    const base_url = "https://image.tmdb.org/t/p/original/";
-
-    return (
-        <div className="row">
-            <h2>{title}</h2>
-            <div className="row__posters">
-                {movies.map(movie => (
-                    <img
-                        key={movie.id}
-                        className={`row__poster ${isLargeRow && "row__posterLarge"}`}
-                        src={`${base_url}${isLargeRow ? movie.poster_path : movie.backdrop_path}`}
-                        alt={movie.name}
-                    />
-                ))}
-            </div>
-        </div>
-    );
+css
+Copy
+Edit
+/* Example of media queries */
+@media (max-width: 768px) {
+  .row__posters {
+    padding: 10px;
+  }
+  .row__poster {
+    max-height: 150px;
+  }
 }
+5. CSS for Smooth Scrolling
+You mentioned scroll functionality in your Row component. If you're using scrollable containers, don't forget to add smooth scrolling for better UX.
 
-export default Row;
+Example:
+
+css
+Copy
+Edit
+.row__posters {
+  display: flex;
+  overflow-x: scroll;
+  scroll-behavior: smooth;
+}
+6. YouTube Component Integration (if applicable)
+If you're showing trailers with react-youtube or any video player, ensure you properly handle the videoId prop and manage the display of trailers. Don't forget to include a close button if needed.
+
+Example:
+
+javascript
+Copy
+Edit
+{trailerUrl && (
+  <YouTube
+    videoId={trailerUrl}
+    opts={{
+      height: "390",
+      width: "100%",
+      playerVars: {
+        autoplay: 1,
+      },
+    }}
+  />
+)}
+7. Image Rendering and Caching
+Since you're working with movie posters and backdrops, make sure images are loading efficiently. Use proper image sizing and lazy loading to improve performance.
+
+Example:
+
+javascript
+Copy
+Edit
+<img
+  key={movie.id}
+  className={`row__poster ${isLargeRow && "row__posterLarge"}`}
+  src={`${base_url}${isLargeRow ? movie.poster_path : movie.backdrop_path}`}
+  alt={movie.name}
+/>
+8. State Management for Trailer URL
+For functionality like displaying movie trailers, manage the state for the selected trailer URL. When a user clicks a movie, the trailer should update.
+
+Example:
+
+javascript
+Copy
+Edit
+const [trailerUrl, setTrailerUrl] = useState("");
+
+const handleClick = (movie) => {
+  if (trailerUrl) {
+    setTrailerUrl(""); // Close the trailer
+  } else {
+    // Fetch and set trailer URL (e.g., using TMDB or YouTube API)
+  }
+};
+9. Scroll Indicators
+If you're allowing users to scroll horizontally, make sure your scroll indicators (like the right caret) are functioning. Use event listeners to track the scroll position and enable/disable the indicator when necessary.
+
+Example:
+
+javascript
+Copy
+Edit
+const handleScrollRight = () => {
+  if (rowRef.current) {
+    rowRef.current.scrollBy({ left: 300, behavior: "smooth" });
+  }
+};
+10. Error Handling
+Always make sure to include proper error handling for data fetching, especially when working with external APIs. Display meaningful error messages to the user in case something goes wrong.
+
+Example:
+
+javascript
+Copy
+Edit
+useEffect(() => {
+  (async () => {
+    try {
+      const response = await axios.get(fetchUrl);
+      setMovies(response.data.results);
+    } catch (error) {
+      setError("Something went wrong. Please try again later.");
+    }
+  })();
+}, [fetchUrl]);
+
+// Display error message
+{error && <p>{error}</p>}
+11. Component Cleanup
+Ensure that when components unmount (for instance, when navigating away from the page), you clean up any ongoing asynchronous operations like fetching data or closing any external services (e.g., YouTube video player).
+
+Example:
+
+javascript
+Copy
+Edit
+useEffect(() => {
+  const controller = new AbortController();
+
+  (async () => {
+    try {
+      const response = await axios.get(fetchUrl, {
+        signal: controller.signal,  // Aborts fetch if component unmounts
+      });
+      setMovies(response.data.results);
+    } catch (error) {
+      if (error.name !== "AbortError") {
+        console.error(error);
+      }
+    }
+  })();
+
+  return () => {
+    controller.abort();  // Cleanup when component unmounts
+  };
+}, [fetchUrl]);
+Key Takeaways:
+API calls and error handling should be robust and well-managed.
+State management is crucial for managing dynamic data like trailers.
+Responsive design and smooth scrolling should be implemented for the best user experience.
+Modular code with reusable components ensures maintainability.
+By focusing on these areas and ensuring the necessary code is implemented and well-structured, your project will be solid, functional, and ready to scale.
+
+
+
+
+
+
+
+
